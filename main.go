@@ -116,6 +116,8 @@ func main() {
 		}
 	case "icmp":
 		filter = icmpFIlter
+	case "ICMP":
+		filter = icmpFIlter
 	}
 
 	err = handle.SetBPFFilter(filter)
@@ -128,7 +130,7 @@ func main() {
 
 	go func() {
 		<-killtime
-		if *protocol == "icmp" {
+		if *protocol == "icmp" || *protocol == "ICMP" {
 			colourtext.PrintTime("complete")
 			os.Exit(0)
 		}
@@ -175,10 +177,10 @@ func ParseICMPPacket(icmplayer gopacket.Layer) {
 	echo, _ := icmplayer.(*layers.ICMPv4)
 
 	if echo.TypeCode.Type() == layers.ICMPv4TypeEchoRequest {
-		colourtext.PrintInfo("request")
+		colourtext.PrintInfo("ping request")
 	}
 	if echo.TypeCode.Type() == layers.ICMPv4TypeEchoReply {
-		colourtext.PrintInfo("reply")
+		colourtext.PrintInfo("ping reply")
 	}
 }
 func ParseCDPToStruct(cdpLayer gopacket.Layer) SwitchData {
