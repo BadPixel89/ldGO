@@ -52,7 +52,7 @@ const defaultFilter = "ether[12:2]==0x88cc or ether[20:2]==0x2000"
 const icmpFIlter = "icmp[icmptype] == icmp-echo or icmp[icmptype] == icmp-echoreply"
 const blurb = "cross platform link discovery"
 const kofi = "https://ko-fi.com/dktools"
-const versionString = "version: 0.1b"
+const versionString = "version: 0.2b"
 const repoString = "https://github.com/BadPixel89/gold"
 
 func main() {
@@ -306,19 +306,10 @@ func WriteSwitchDataStructAsJson(data SwitchData) error {
 }
 func PrintVersionBanner() {
 	//	this looks like a mess becuase of the escape characters for backslashes. Prints nice.
-	colourtext.PrintColour(colourtext.Yellow, "_________     ______________   | "+blurb)
-	colourtext.PrintColour(colourtext.Yellow, "__  ____/________  / __  __ \\  | ")
-	colourtext.PrintColour(colourtext.Yellow, "_  / __ _  __ \\_  /  _  / / /  | "+repoString)
-	colourtext.PrintColour(colourtext.Yellow, "/ /_/ / / /_/ /  /___/ /_/ /   | "+kofi)
-	colourtext.PrintColour(colourtext.Yellow, "\\____/  \\____//_____/_____/    | "+versionString)
+	colourtext.PrintColour(colourtext.Yellow, " _     __________________    | "+blurb)
+	colourtext.PrintColour(colourtext.Yellow, "| | __| |___  ____/_  __ \\   |")
+	colourtext.PrintColour(colourtext.Yellow, "| |/ _` |__  / __ _  / / /   | "+repoString)
+	colourtext.PrintColour(colourtext.Yellow, "| | (_| | / /_/ / / /_/ /    | "+kofi)
+	colourtext.PrintColour(colourtext.Yellow, "|_|\\__,_| \\____/  \\____/     | "+versionString)
 	os.Exit(0)
 }
-
-/*
-_     __________________    | cross platform link discovery
-| | __| |___  ____/_  __ \   |
-| |/ _` |__  / __ _  / / /   | https://github.com/BadPixel89/LDGo
-| | (_| | / /_/ / / /_/ /    | https://ko-fi.com/dktools
-|_|\__,_| \____/  \____/     | version: 0.2b
-
-*/
