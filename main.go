@@ -53,7 +53,7 @@ const icmpFIlter = "icmp[icmptype] == icmp-echo or icmp[icmptype] == icmp-echore
 const blurb = "cross platform link discovery"
 const kofi = "https://ko-fi.com/dktools"
 const versionString = "version: 0.2b"
-const repoString = "https://github.com/BadPixel89/gold"
+const repoString = "https://github.com/BadPixel89/ldGO"
 
 func main() {
 	flag.Parse()
