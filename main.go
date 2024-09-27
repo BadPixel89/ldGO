@@ -247,8 +247,15 @@ func FindNetworkDevice() (bool, string) {
 
 	if *listAdaptors {
 		colourtext.PrintInfo("devices: ")
+		colourtext.PrintInfo("name | description | IP")
 		for i, dev := range devices {
-			colourtext.PrintColour(colourtext.Cyan, "["+fmt.Sprint(i)+"] "+dev.Name+" "+dev.Description)
+			if len(dev.Addresses) == 0 {
+				colourtext.PrintColour(colourtext.Cyan, "["+fmt.Sprint(i)+"] "+dev.Name+" | "+dev.Description+" | ")
+				continue
+			} else {
+				colourtext.PrintColour(colourtext.Cyan, "["+fmt.Sprint(i)+"] "+dev.Name+" | "+dev.Description+" | "+dev.Addresses[0].IP.String())
+			}
+
 		}
 		return false, ""
 	}
