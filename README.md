@@ -1,7 +1,7 @@
 # ldGo
 Command line link discovery tool written in GoLang
 
-Working in Windows 11 
+Working in Windows 11 / Linux / Mac
 
 # Depends on nPcap / libPcap see below for install instructions
 
@@ -22,6 +22,10 @@ Install libpcap-dev to build the project:
     sudo apt install libpcap-dev
 
 If you install libpcap0.8 and the program still fails, try installing the dev version as well.
+
+## Mac
+
+No install requirements in my testing. I just instlaled go on a mac, cloned the repo, built it and it worked. It is possible that this has installed something, I will test on a clean Mac when I can. 
 
 # Basic Usage
 Navigate a command line such as Powershell to the folder containing gold.exe, or add the containing folder to your system path to use it as a command from anywhere.
