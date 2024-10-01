@@ -11,6 +11,8 @@ Download and install nPcap:
 
 https://npcap.com/#download
 
+You may need admin to run
+
 ## LINUX:
 
 Install libpcap0.8 to run the tool:
@@ -22,6 +24,8 @@ Install libpcap-dev to build the project:
     sudo apt install libpcap-dev
 
 If you install libpcap0.8 and the program still fails, try installing the dev version as well.
+
+You will likely need to run as sudo
 
 ## Mac
 
@@ -60,6 +64,10 @@ While this readme covers the basics, use the following command to list all avail
 ## Known issues Linux
 On Linux the program always waits for the timer to complete, even if a packet is captured. You can ctrl+c to cancel the operation but this is not desired behaviour. I think this is related to how one-way channels are handled, no further packets are captured after the first.
 
+Network adapters don't have descriptions making them harder to identify, usually the IPV4 address is a good indicator.
+
 Running in WSL, at least in my setup, I was unable to capture packets on any interface, I will test this further but it may be something unique to my environment. I also cannot resolve local network hostnames in this environment.
 
+## Known issues Mac
 
+Network adapters don't have descriptions and show IPV6 addresses, making them harder to identify. 
