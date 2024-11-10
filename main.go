@@ -71,9 +71,12 @@ func main() {
 		fmt.Fprintf(os.Stdout, "To run this software you will need:\n\nWindows:\nnPcap https://npcap.com/#download.\n\nLinux:\nlibpcap0.8 to run, libpcap-dev to build\n\nIn some environments you will need to run as admin or sudo\n\n")
 		flag.CommandLine.Usage()
 		os.Exit(0)
+		return
 	}
 	if *version {
 		PrintVersionBanner()
+		os.Exit(0)
+		return
 	}
 
 	devicePresent, devName := FindNetworkDevice()
