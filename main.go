@@ -252,13 +252,15 @@ func FindNetworkDevice() (bool, string) {
 		colourtext.PrintInfo("devices: ")
 		colourtext.PrintInfo("name | description | IP")
 		for i, dev := range devices {
-			if len(dev.Addresses) == 0 {
-				colourtext.PrintColour(colourtext.Cyan, "["+fmt.Sprint(i)+"] "+dev.Name+" | "+dev.Description+" | ")
-				continue
-			} else {
-				colourtext.PrintColour(colourtext.Cyan, "["+fmt.Sprint(i)+"] "+dev.Name+" | "+dev.Description+" | "+dev.Addresses[0].IP.String())
-			}
 
+			switch len(dev.Addresses) {
+			case 0:
+				colourtext.PrintColour(colourtext.Cyan, "["+fmt.Sprint(i)+"] "+dev.Name+" | "+dev.Description+" | ")
+			case 1:
+				colourtext.PrintColour(colourtext.Cyan, "["+fmt.Sprint(i)+"] "+dev.Name+" | "+dev.Description+" | "+dev.Addresses[0].IP.String())
+			case 2:
+				colourtext.PrintColour(colourtext.Cyan, "["+fmt.Sprint(i)+"] "+dev.Name+" | "+dev.Description+" | "+dev.Addresses[1].IP.String())
+			}
 		}
 		return false, ""
 	}
