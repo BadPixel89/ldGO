@@ -248,12 +248,6 @@ func FindNetworkDevice() (bool, string) {
 		return devices[i].Name < devices[j].Name
 	})
 
-	//fmt.Printf("+%s+\n", strings.Repeat("-", 45))
-	//fmt.Printf("| %-20s | %-20s |\n", "vegetables", "fruits")
-	//fmt.Printf("|%s|\n", strings.Repeat("-", 45))
-	//fmt.Printf("| %-20s | %-20s |\n", "potato", "strawberry")
-	//fmt.Printf("+%s+\n", strings.Repeat("-", 45))
-
 	if *listAdaptors {
 		colourtext.PrintInfo("devices: ")
 		header := fmt.Sprintf("%10s %28s %14s", "name", "description", "IP")
