@@ -248,18 +248,28 @@ func FindNetworkDevice() (bool, string) {
 		return devices[i].Name < devices[j].Name
 	})
 
+	//fmt.Printf("+%s+\n", strings.Repeat("-", 45))
+	//fmt.Printf("| %-20s | %-20s |\n", "vegetables", "fruits")
+	//fmt.Printf("|%s|\n", strings.Repeat("-", 45))
+	//fmt.Printf("| %-20s | %-20s |\n", "potato", "strawberry")
+	//fmt.Printf("+%s+\n", strings.Repeat("-", 45))
+
 	if *listAdaptors {
 		colourtext.PrintInfo("devices: ")
-		colourtext.PrintInfo("name | description | IP")
+		header := fmt.Sprintf("%10s %27s %13s", "name", "description", "IP")
+		colourtext.PrintColour(colourtext.Cyan, header)
 		for i, dev := range devices {
-
 			switch len(dev.Addresses) {
 			case 0:
-				colourtext.PrintColour(colourtext.Cyan, "["+fmt.Sprint(i)+"] "+dev.Name+" | "+dev.Description+" | ")
+				line := fmt.Sprintf("%-5s %-20s | %-20s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description)
+				colourtext.PrintColour(colourtext.Cyan, line)
 			case 1:
-				colourtext.PrintColour(colourtext.Cyan, "["+fmt.Sprint(i)+"] "+dev.Name+" | "+dev.Description+" | "+dev.Addresses[0].IP.String())
+				line := fmt.Sprintf("%-5s %-20s | %-20s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description)
+				colourtext.PrintColour(colourtext.Cyan, line)
 			case 2:
-				colourtext.PrintColour(colourtext.Cyan, "["+fmt.Sprint(i)+"] "+dev.Name+" | "+dev.Description+" | "+dev.Addresses[1].IP.String())
+				line := fmt.Sprintf("%-5s %-20s | %-20s | %-20s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description, dev.Addresses[1].IP.String())
+				//line := "[" + fmt.Sprint(i) + "] " + dev.Name + " | " + dev.Description + " | " + dev.Addresses[1].IP.String()
+				colourtext.PrintColour(colourtext.Cyan, line)
 			}
 		}
 		return false, ""
