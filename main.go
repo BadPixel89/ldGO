@@ -256,15 +256,15 @@ func FindNetworkDevice() (bool, string) {
 
 	if *listAdaptors {
 		colourtext.PrintInfo("devices: ")
-		header := fmt.Sprintf("%10s %27s %13s", "name", "description", "IP")
+		header := fmt.Sprintf("%10s %28s %14s", "name", "description", "IP")
 		colourtext.PrintColour(colourtext.Cyan, header)
 		for i, dev := range devices {
 			switch len(dev.Addresses) {
 			case 0:
-				line := fmt.Sprintf("%-5s %-20s | %-20s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description)
+				line := fmt.Sprintf("%-5s %-20s | %-20s |", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description)
 				colourtext.PrintColour(colourtext.Cyan, line)
 			case 1:
-				line := fmt.Sprintf("%-5s %-20s | %-20s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description)
+				line := fmt.Sprintf("%-5s %-20s | %-20s |", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description)
 				colourtext.PrintColour(colourtext.Cyan, line)
 			case 2:
 				line := fmt.Sprintf("%-5s %-20s | %-20s | %-20s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description, dev.Addresses[1].IP.String())
