@@ -8,6 +8,8 @@ github.com/BadPixel89/colourtext v0.0.0-20240916083631-dfc13b9ce17d h1:LjudnZr0C
 github.com/BadPixel89/colourtext v0.0.0-20240916083631-dfc13b9ce17d/go.mod h1:AlaGunFwtRP25DmBqYPfLjPac7W5+bSnbW3NG/5ID/Q=
 github.com/BadPixel89/colourtext v0.0.0-20240917132404-6d288e370f99 h1:GRe9WKkV0Ju3z6uQoUIh6J6bawNKHmLYvExlpFiHBvU=
 github.com/BadPixel89/colourtext v0.0.0-20240917132404-6d288e370f99/go.mod h1:AlaGunFwtRP25DmBqYPfLjPac7W5+bSnbW3NG/5ID/Q=
+github.com/BadPixel89/colourtext v0.0.0-20241120113253-fa6eb974e213 h1:cAtbudqh12qa8Ai+1XriGA1YYQedrqeFS9JHYRi2myQ=
+github.com/BadPixel89/colourtext v0.0.0-20241120113253-fa6eb974e213/go.mod h1:AlaGunFwtRP25DmBqYPfLjPac7W5+bSnbW3NG/5ID/Q=
 github.com/google/gopacket v1.1.19 h1:ves8RnFZPGiFnTS0uPQStjwru6uO6h+nlr9j6fL7kF8=
 github.com/google/gopacket v1.1.19/go.mod h1:iJ8V8n6KS+z2U1A8pUwu8bW5SyEMkXJB8Yo/Vo+TKTo=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
@@ -22,6 +24,8 @@ golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5h
 golang.org/x/sys v0.0.0-20190412213103-97732733099d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.25.0 h1:r+8e+loiHxRqhXVl6ML1nO3l1+oFoWbnlu2Ehimmi34=
 golang.org/x/sys v0.25.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
+golang.org/x/sys v0.27.0 h1:wBqf8DvsY9Y/2P8gAfPDEYNuS30J4lPHJxXSb/nJZ+s=
+golang.org/x/sys v0.27.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/tools v0.0.0-20200130002326-2f3ba24bd6e7/go.mod h1:TB2adYChydJhpapKDTa4BR/hXlZSLoq2Wpct/0txZ28=
 golang.org/x/xerrors v0.0.0-20191011141410-1b5146add898/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
