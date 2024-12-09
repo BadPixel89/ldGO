@@ -32,7 +32,7 @@ You will likely need to run as sudo
 No install requirements in my testing. I just installed GoLang on a mac, cloned the repo, built it and it worked. It is possible that this has installed something, I ran on a clean desktop Mac with Apple silicon and it also worked. 
 
 # Basic Usage
-Navigate a command line such as Powershell to the folder containing gold.exe, or add the containing folder to your system path to use it as a command from anywhere.
+Navigate a command line such as Powershell to the folder containing ldgo.exe, or add the containing folder to your system path to use it as a command from anywhere.
 
 To listen for packets, you will need the ID or name of the NIC, as returned by this program. The default behaviour is to prompt the user to run help and list the adapors.
 
@@ -62,11 +62,11 @@ While this readme covers the basics, use the following command to list all avail
     ldgo.exe -h
 
 ## Known issues Linux
-On Linux the program always waits for the timer to complete, even if a packet is captured. You can ctrl+c to cancel the operation but this is not desired behaviour. I think this is related to how one-way channels are handled, no further packets are captured after the first.
+On Linux the program waits for some time after a successful capture is complete. You can ctrl+c to cancel the operation but this is not desired behaviour. No further packets are captured after the first, and the time is usually less than the remaining timeout.
 
 Network adapters don't have descriptions making them harder to identify, usually the IPV4 address is a good indicator.
 
-Running in WSL, at least in my setup, I was unable to capture packets on any interface, I will test this further but it may be something unique to my environment. I also cannot resolve local network hostnames in this environment.
+Running in WSL I was unable to capture packets on any interface.
 
 ## Known issues Mac
 
