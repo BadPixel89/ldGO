@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	interfaceprint "ldgo/interfacePrint"
 	"log"
 	"os"
 	"sort"
@@ -249,23 +250,26 @@ func FindNetworkDevice() (bool, string) {
 	})
 
 	if *listAdaptors {
-		colourtext.PrintInfo("devices: ")
-		header := fmt.Sprintf("%10s %29s %13s", "name", "description", "IP")
-		colourtext.PrintColour(colourtext.Cyan, header)
-		for i, dev := range devices {
-			switch len(dev.Addresses) {
-			case 0:
-				line := fmt.Sprintf("%-5s %-20s | %-20s |", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description)
-				colourtext.PrintColour(colourtext.Cyan, line)
-			case 1:
-				line := fmt.Sprintf("%-5s %-20s | %-20s |", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description)
-				colourtext.PrintColour(colourtext.Cyan, line)
-			case 2:
-				line := fmt.Sprintf("%-5s %-20s | %-20s | %-20s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description, dev.Addresses[1].IP.String())
-				//line := "[" + fmt.Sprint(i) + "] " + dev.Name + " | " + dev.Description + " | " + dev.Addresses[1].IP.String()
-				colourtext.PrintColour(colourtext.Cyan, line)
+		/*
+			colourtext.PrintInfo("devices: ")
+			header := fmt.Sprintf("%10s %29s %13s", "name", "description", "IP")
+			colourtext.PrintColour(colourtext.Cyan, header)
+			for i, dev := range devices {
+				switch len(dev.Addresses) {
+				case 0:
+					line := fmt.Sprintf("%-5s %-20s | %-20s |", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description)
+					colourtext.PrintColour(colourtext.Cyan, line)
+				case 1:
+					line := fmt.Sprintf("%-5s %-20s | %-20s |", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description)
+					colourtext.PrintColour(colourtext.Cyan, line)
+				case 2:
+					line := fmt.Sprintf("%-5s %-20s | %-20s | %-20s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description, dev.Addresses[1].IP.String())
+					//line := "[" + fmt.Sprint(i) + "] " + dev.Name + " | " + dev.Description + " | " + dev.Addresses[1].IP.String()
+					colourtext.PrintColour(colourtext.Cyan, line)
+				}
 			}
-		}
+		*/
+		interfaceprint.PrintInterfaces(devices)
 		return false, ""
 	}
 
