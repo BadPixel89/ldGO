@@ -22,7 +22,7 @@ func PrintInterfaces(nics []pcap.Interface) (bool, string) {
 			line := fmt.Sprintf("%-5s %-20s | %-20s |", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description)
 			colourtext.PrintColour(colourtext.Cyan, line)
 		case 2:
-			line := fmt.Sprintf("%-5s %-20s | %-20s | %-20s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description, dev.Addresses[1].IP.String())
+			line := fmt.Sprintf("%-5s %-20s | %-20s | %-20s", "["+fmt.Sprint(i)+"]", dev.Addresses[1].IP.String(), dev.Name, dev.Description)
 			//line := "[" + fmt.Sprint(i) + "] " + dev.Name + " | " + dev.Description + " | " + dev.Addresses[1].IP.String()
 			colourtext.PrintColour(colourtext.Cyan, line)
 		}
