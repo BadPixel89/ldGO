@@ -95,7 +95,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	//colourtext.PrintSuccess("device found: " + devName)
 	color.Green("[pass] device found: " + devName)
 
 	handle, err := pcap.OpenLive(devName, 1600, true, pcap.BlockForever)
