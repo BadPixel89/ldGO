@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/BadPixel89/colourtext"
+	"github.com/fatih/color"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
@@ -53,7 +53,7 @@ const defaultFilter = "ether[12:2]==0x88cc or ether[20:2]==0x2000"
 const icmpFIlter = "icmp[icmptype] == icmp-echo or icmp[icmptype] == icmp-echoreply"
 const blurb = "cross platform link discovery"
 const kofi = "https://ko-fi.com/dktools"
-const versionString = "version: 0.4a"
+const versionString = "version: 0.5a"
 const repoString = "https://github.com/BadPixel89/ldGO"
 
 func main() {
@@ -61,15 +61,13 @@ func main() {
 
 	log.SetFlags(0)
 
-	colourtext.EnableVirtualConsoleStdout()
-	colourtext.EnableVirtualConsoleStderr()
-
 	if len(os.Args) == 1 {
-		colourtext.PrintInfo("No flags passed, use -h to see helptext")
+		//colourtext.PrintInfo("No flags passed, use -h to see helptext")
+		color.Cyan("[info] No flags passed, use -h to see helptext")
 		*listAdaptors = true
 	}
 	if *help {
-		fmt.Fprintf(os.Stdout, "To run this software you will need:\n\nWindows:\nnPcap https://npcap.com/#download.\n\nLinux:\nlibpcap0.8 to run, libpcap-dev to build\n\nIn some environments you will need to run as admin or sudo\n\n")
+		fmt.Fprintf(os.Stdout, "To run this software you will need:\n\nWindows:\nnPcap https://npcap.com/#download.\n\nLinux:\nlibpcap0.8 to run, libpcap-dev to build\n\nThis is available in most package managers.\n\nIn most environments you will need to run as admin or sudo\n\n")
 		flag.CommandLine.Usage()
 		os.Exit(0)
 		return
@@ -97,7 +95,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	colourtext.PrintSuccess("device found: " + devName)
+	//colourtext.PrintSuccess("device found: " + devName)
+	color.Green("[pass] device found: " + devName)
 
 	handle, err := pcap.OpenLive(devName, 1600, true, pcap.BlockForever)
 	if err != nil {
@@ -115,9 +114,6 @@ func main() {
 		filter = lldpOnlyFilter
 	case "lldp":
 		filter = lldpOnlyFilter
-		if *timeout == 61 {
-			*timeout = 31
-		}
 	case "icmp":
 		filter = icmpFIlter
 	case "ICMP":
@@ -128,25 +124,30 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	//lldp announces every 30s
+	if filter == lldpOnlyFilter {
+		*timeout = 31
+	}
 
 	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 	killtime := time.After(time.Duration(*timeout) * time.Second)
-
+	//timer to exit afer timeout duration
 	go func() {
 		<-killtime
 		if *protocol == "icmp" || *protocol == "ICMP" {
-			colourtext.PrintTime("complete")
+			color.Cyan("[time] complete")
 			os.Exit(0)
 		}
-		colourtext.PrintTime("no packets captured")
+		color.Cyan("[time] no packets captured")
 		os.Exit(0)
 	}()
 
-	colourtext.PrintSuccess("starting listener with filter '" + filter + "'")
+	color.Green("starting listener with filter '" + filter + "'")
 	//	this method returns and quits as soon as it finds any packet matching the filter
+	//	except when this is ICMP - in which case it will keep running for the duration of the specified timeout
 	switchInfo := StartListening(*packetSource)
 
-	colourtext.PrintColour(colourtext.Cyan, switchInfo.String())
+	color.Cyan(switchInfo.String())
 	err = WriteSwitchDataStructAsJson(switchInfo)
 	if err != nil {
 		log.Fatal(err.Error())
@@ -181,10 +182,10 @@ func ParseICMPPacket(icmplayer gopacket.Layer) {
 	echo, _ := icmplayer.(*layers.ICMPv4)
 
 	if echo.TypeCode.Type() == layers.ICMPv4TypeEchoRequest {
-		colourtext.PrintInfo("ping request")
+		color.Cyan("ping request")
 	}
 	if echo.TypeCode.Type() == layers.ICMPv4TypeEchoReply {
-		colourtext.PrintInfo("ping reply")
+		color.Cyan("ping reply")
 	}
 }
 func ParseCDPToStruct(cdpLayer gopacket.Layer) SwitchData {
@@ -240,8 +241,8 @@ func ParseLLDPManagementIP(addr []byte) string {
 func FindNetworkDevice() (bool, string) {
 	devices, err := pcap.FindAllDevs()
 	if err != nil {
-		colourtext.PrintError("no devices found: MUST HAVE RELEVANT PACKET CAPTURE LIBRARY INSTALLED. In some environments you may need to run the program as admin/sudo. Pass -h for help text")
-		colourtext.PrintError(err.Error())
+		color.Red("no devices found: MUST HAVE RELEVANT PACKET CAPTURE LIBRARY INSTALLED. In some environments you may need to run the program as admin/sudo. Pass -h for help text")
+		color.Red(err.Error())
 		os.Exit(1)
 	}
 
@@ -250,25 +251,6 @@ func FindNetworkDevice() (bool, string) {
 	})
 
 	if *listAdaptors {
-		/*
-			colourtext.PrintInfo("devices: ")
-			header := fmt.Sprintf("%10s %29s %13s", "name", "description", "IP")
-			colourtext.PrintColour(colourtext.Cyan, header)
-			for i, dev := range devices {
-				switch len(dev.Addresses) {
-				case 0:
-					line := fmt.Sprintf("%-5s %-20s | %-20s |", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description)
-					colourtext.PrintColour(colourtext.Cyan, line)
-				case 1:
-					line := fmt.Sprintf("%-5s %-20s | %-20s |", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description)
-					colourtext.PrintColour(colourtext.Cyan, line)
-				case 2:
-					line := fmt.Sprintf("%-5s %-20s | %-20s | %-20s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Description, dev.Addresses[1].IP.String())
-					//line := "[" + fmt.Sprint(i) + "] " + dev.Name + " | " + dev.Description + " | " + dev.Addresses[1].IP.String()
-					colourtext.PrintColour(colourtext.Cyan, line)
-				}
-			}
-		*/
 		interfaceprint.PrintInterfaces(devices)
 		return false, ""
 	}
@@ -325,11 +307,10 @@ func WriteSwitchDataStructAsJson(data SwitchData) error {
 	return nil
 }
 func PrintVersionBanner() {
-	//	this looks like a mess becuase of the escape characters for backslashes. Prints nice.
-	colourtext.PrintColour(colourtext.Yellow, " _     __________________    | "+blurb)
-	colourtext.PrintColour(colourtext.Yellow, "| | __| |___  ____/_  __ \\   |")
-	colourtext.PrintColour(colourtext.Yellow, "| |/ _` |__  / __ _  / / /   | "+repoString)
-	colourtext.PrintColour(colourtext.Yellow, "| | (_| | / /_/ / / /_/ /    | "+kofi)
-	colourtext.PrintColour(colourtext.Yellow, "|_|\\__,_| \\____/  \\____/     | "+versionString)
+	color.Yellow(" _     __________________    | " + blurb)
+	color.Yellow("| | __| |___  ____/_  __ \\   |")
+	color.Yellow("| |/ _` |__  / __ _  / / /   | " + repoString)
+	color.Yellow("| | (_| | / /_/ / / /_/ /    | " + kofi)
+	color.Yellow("|_|\\__,_| \\____/  \\____/     | " + versionString)
 	os.Exit(0)
 }
