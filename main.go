@@ -53,7 +53,7 @@ const defaultFilter = "ether[12:2]==0x88cc or ether[20:2]==0x2000"
 const icmpFIlter = "icmp[icmptype] == icmp-echo or icmp[icmptype] == icmp-echoreply"
 const blurb = "cross platform link discovery"
 const kofi = "https://ko-fi.com/dktools"
-const versionString = "version: 0.5a"
+const versionString = "version: 0.6a"
 const repoString = "https://github.com/BadPixel89/ldGO"
 
 func main() {
