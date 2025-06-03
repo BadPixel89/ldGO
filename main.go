@@ -62,12 +62,11 @@ func main() {
 	log.SetFlags(0)
 
 	if len(os.Args) == 1 {
-		//colourtext.PrintInfo("No flags passed, use -h to see helptext")
 		color.Cyan("[info] No flags passed, use -h to see helptext")
 		*listAdaptors = true
 	}
 	if *help {
-		fmt.Fprintf(os.Stdout, "To run this software you will need:\n\nWindows:\nnPcap https://npcap.com/#download.\n\nLinux:\nlibpcap0.8 to run, libpcap-dev to build\n\nThis is available in most package managers.\n\nIn most environments you will need to run as admin or sudo\n\n")
+		fmt.Fprintf(os.Stdout, "To run this software you will need:\n\nWindows:\nnPcap https://npcap.com/#download.\n\nLinux:\nlibpcap0.8 to run, libpcap-dev to build\n\nThis is available in most package managers.\n\nIn most environments you will need to use sudo\n\n")
 		flag.CommandLine.Usage()
 		os.Exit(0)
 		return
@@ -133,7 +132,7 @@ func main() {
 	//timer to exit afer timeout duration
 	go func() {
 		<-killtime
-		if *protocol == "icmp" || *protocol == "ICMP" {
+		if filter == icmpFIlter {
 			color.Cyan("[time] complete")
 			os.Exit(0)
 		}
@@ -151,6 +150,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+
 	handle.Close()
 	os.Exit(0)
 }
@@ -166,13 +166,14 @@ func StartListening(source gopacket.PacketSource) SwitchData {
 		}
 		if lldpLayer != nil && lldpLayerInfo != nil {
 			var lldpInfo SwitchData = ParseLLDPToStruct(lldpLayer, lldpLayerInfo)
-			//	this will happen when you plug in the network interface while listening, the packets capture will be incomplete
+			//	this will happen when you plug in the network interface while listening, the packets captured will be incomplete
 			if lldpInfo.VLAN != "[fail]" {
 				return lldpInfo
 			}
 		}
 		if icmpLayer != nil {
 			ParseICMPPacket(icmpLayer)
+			//don't return here, ctrl+c or wait for timeout
 		}
 	}
 	return SwitchData{}
