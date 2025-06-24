@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	interfaceprint "ldgo/interfacePrint"
 	"log"
 	"os"
 	"sort"
@@ -251,7 +250,7 @@ func FindNetworkDevice() (bool, string) {
 	})
 
 	if *listAdaptors {
-		interfaceprint.PrintInterfaces(devices)
+		PrintInterfaces(devices)
 		return false, ""
 	}
 
@@ -305,6 +304,19 @@ func WriteSwitchDataStructAsJson(data SwitchData) error {
 		return err
 	}
 	return nil
+}
+func PrintInterfaces(nics []pcap.Interface) {
+	color.Cyan("devices: (devices with no IPv4 address are skipped)")
+	header := fmt.Sprintf("%10s %54s %31s", "name", "IP", "description")
+	color.Cyan(header)
+	for i, dev := range nics {
+		for j, addr := range dev.Addresses {
+			if addr.IP.To4() != nil {
+				line := fmt.Sprintf("%-5s %-53s | %-20s | %-25s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Addresses[j].IP.String(), dev.Description)
+				color.Cyan(line)
+			}
+		}
+	}
 }
 func PrintVersionBanner() {
 	color.Yellow(" _     __________________    | " + blurb)
