@@ -305,6 +305,9 @@ func WriteSwitchDataStructAsJson(data SwitchData) error {
 	}
 	return nil
 }
+
+// can produce somewhat unintuitive output, interfaces without an IPV4 will not be printed, but will show the index they are at in the list as their option number
+// this is 'fine' just put that number in I guess? - can you select a missing adapter? Probably - will work just most likely will not capture any packets.
 func PrintInterfaces(nics []pcap.Interface) {
 	color.Cyan("devices: (devices with no IPv4 address are skipped)")
 	header := fmt.Sprintf("%10s %54s %31s", "name", "IP", "description")
