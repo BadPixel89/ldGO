@@ -39,6 +39,7 @@ func (sd SwitchData) String() string {
 
 var help = flag.Bool("h", false, "Display the help text and usage of each flag")
 var listAdaptors = flag.Bool("l", false, "List the current network interfaces and exit the program. No packets will be captured")
+var connectedOnly = flag.Bool("c", false, "List only connected adapters. This means interfaces that have IPv4 addresses.")
 var nicIndex = flag.Int("i", 9999, "Select the index of the network adapter you want to listen on, as displayed by the list flag. -i 0 will listen on the first adapter in the list")
 var nicName = flag.String("n", "", "Select the network adapter to listen on by name. Case sensitive. This can be any substring found in the name or description and the first result is chosen. For example, '-n Intel' will return the first adapter where the name or description contains 'Intel'. Default behaviour is an empty string")
 var protocol = flag.String("p", "", "Choose to listen on only one protocol. Valid choices are '-p cdp' '-p lldp' '-p icmp'. Default action is to listen for CDP and LLDP. Sepcifying LLDP will set the timeout to 31s unless a none default timeout is chosen. The purpose of ICMP is to enable testing on the given interface. Run a ping from a separate terminal while GoLD is listening for ICMP and you should see a request and a reply per ping")
@@ -60,10 +61,6 @@ func main() {
 
 	log.SetFlags(0)
 
-	if len(os.Args) == 1 {
-		color.Cyan("[info] No flags passed, use -h to see helptext")
-		*listAdaptors = true
-	}
 	if *help {
 		fmt.Fprintf(os.Stdout, "To run this software you will need:\n\nWindows:\nnPcap https://npcap.com/#download.\n\nLinux:\nlibpcap0.8 to run, libpcap-dev to build\n\nThis is available in most package managers.\n\nIn most environments you will need to use sudo\n\n")
 		flag.CommandLine.Usage()
@@ -74,6 +71,13 @@ func main() {
 		PrintVersionBanner()
 		os.Exit(0)
 		return
+	}
+	if len(os.Args) == 1 {
+		color.Cyan("[info] No flags passed, use -h to see helptext")
+		*listAdaptors = true
+	}
+	if *connectedOnly {
+		*listAdaptors = true
 	}
 
 	devicePresent, devName := FindNetworkDevice()
@@ -103,17 +107,11 @@ func main() {
 
 	var filter string = defaultFilter
 	switch *protocol {
-	case "CDP":
+	case "CDP", "cdp":
 		filter = cdpOnlyFilter
-	case "cdp":
-		filter = cdpOnlyFilter
-	case "LLDP":
+	case "LLDP", "lldp":
 		filter = lldpOnlyFilter
-	case "lldp":
-		filter = lldpOnlyFilter
-	case "icmp":
-		filter = icmpFIlter
-	case "ICMP":
+	case "ICMP", "icmp":
 		filter = icmpFIlter
 	}
 
@@ -250,7 +248,7 @@ func FindNetworkDevice() (bool, string) {
 	})
 
 	if *listAdaptors {
-		PrintInterfaces(devices)
+		PrintAllInterfaces(devices)
 		return false, ""
 	}
 
@@ -308,17 +306,24 @@ func WriteSwitchDataStructAsJson(data SwitchData) error {
 
 // can produce somewhat unintuitive output, interfaces without an IPV4 will not be printed, but will show the index they are at in the list as their option number
 // this is 'fine' just put that number in I guess? - can you select a missing adapter? Probably - will work just most likely will not capture any packets.
-func PrintInterfaces(nics []pcap.Interface) {
+func PrintAllInterfaces(nics []pcap.Interface) {
 	color.Cyan("devices: (devices with no IPv4 address are skipped)")
-	header := fmt.Sprintf("%10s %54s %31s", "name", "IP", "description")
+	header := fmt.Sprintf("%10s %53s %41s", "name", "IP", "description")
 	color.Cyan(header)
+	line := ""
 	for i, dev := range nics {
+		line = ""
 		for j, addr := range dev.Addresses {
 			if addr.IP.To4() != nil {
-				line := fmt.Sprintf("%-5s %-53s | %-20s | %-25s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Addresses[j].IP.String(), dev.Description)
-				color.Cyan(line)
+				line = fmt.Sprintf("%-5s %-53s | %-30s | %-55s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Addresses[j].IP.String(), dev.Description)
+				break
 			}
+			line = fmt.Sprintf("%-5s %-53s | %-30s | %-55s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Addresses[j].IP.String(), dev.Description)
 		}
+		if line == "" && *connectedOnly {
+			continue
+		}
+		color.Cyan(line)
 	}
 }
 func PrintVersionBanner() {
