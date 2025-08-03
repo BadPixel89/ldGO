@@ -311,19 +311,23 @@ func PrintAllInterfaces(nics []pcap.Interface) {
 	header := fmt.Sprintf("%10s %53s %41s", "name", "IP", "description")
 	color.Cyan(header)
 	line := ""
+	printed := false
 	for i, dev := range nics {
 		line = ""
+		printed = false
 		for j, addr := range dev.Addresses {
 			if addr.IP.To4() != nil {
 				line = fmt.Sprintf("%-5s %-53s | %-30s | %-55s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Addresses[j].IP.String(), dev.Description)
+				color.Cyan(line)
+				printed = true
 				break
 			}
-			line = fmt.Sprintf("%-5s %-53s | %-30s | %-55s", "["+fmt.Sprint(i)+"]", dev.Name, dev.Addresses[j].IP.String(), dev.Description)
 		}
-		if line == "" && *connectedOnly {
-			continue
+
+		if !*connectedOnly && !printed {
+			line = fmt.Sprintf("%-5s %-53s | %-30s | %-55s", "["+fmt.Sprint(i)+"]", dev.Name, "", dev.Description)
+			color.Cyan(line)
 		}
-		color.Cyan(line)
 	}
 }
 func PrintVersionBanner() {
